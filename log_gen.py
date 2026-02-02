@@ -3,9 +3,24 @@ import random
 from datetime import datetime
 
 # ────────────────────────────────────────────────
-#  WORD LISTS – regular logs
+# ANSI COLORS
 # ────────────────────────────────────────────────
+RESET = "\033[0m"
+COLORS = {
+    "INFO":     "\033[36m",      # cyan
+    "DEBUG":    "\033[90m",      # bright black / gray
+    "TRACE":    "\033[90m",
+    "NOTICE":   "\033[35m",      # magenta
+    "WARN":     "\033[33m",      # yellow
+    "ERROR":    "\033[31;1m",    # bright red
+    "CRITICAL": "\033[31;1m\033[1m",  # bold bright red
+}
+DIM = "\033[2m"      # dim for host / service
+BRIGHT = "\033[1m"
 
+# ────────────────────────────────────────────────
+# WORD LISTS
+# ────────────────────────────────────────────────
 LOG_LEVELS = ["INFO", "WARN", "ERROR", "DEBUG", "CRITICAL", "TRACE", "NOTICE"]
 
 SERVICES = [
@@ -13,288 +28,194 @@ SERVICES = [
     "kubelet", "etcd-watch", "control-plane", "sidecar-proxy",
     "otel-collector", "prom-scraper", "alert-dispatcher", "chaos-agent",
     "vector-agent", "fluent-bit", "filebeat", "metricd", "trivy-scanner",
-    "vault-agent", "keycloak-sync", "oidc-broker", "sso-bridge",
 ]
 
 HOSTS = [
     "node-07a", "k8s-worker-42", "ip-172-31-94-112", "ec2-i-0f8d3e2a1b9c4d5e",
     "rke2-master-3", "aks-agentpool-12457890-vmss00000p", "pod-ip-10-244-3-189",
-    "gke-g1-small-xyz-789f", "minikube", "kind-control-plane", "talos-ctrl-01"
+    "gke-g1-small-xyz-789f", "minikube", "kind-control-plane",
 ]
 
 ACTION_VERBS = [
     "processing", "validating", "rejecting", "authorizing", "refreshing",
     "syncing", "reconciling", "evicting", "terminating", "scaling",
-    "restarting", "rolling", "draining", "cordon", "uncordon",
-    "retrying", "failing", "timeout", "ratelimiting", "throttling",
+    "restarting", "rolling", "draining", "retrying", "failing", "throttling",
 ]
 
 OBJECTS = [
-    "JWT", "access-token", "refresh-token", "OIDC-id-token", "SAML-assertion",
-    "pod", "deployment", "statefulset", "daemonset", "node", "namespace",
-    "secret", "configmap", "ingress", "service", "pvc", "pv",
+    "JWT", "access-token", "refresh-token", "pod", "deployment", "statefulset",
+    "node", "namespace", "secret", "configmap", "ingress", "service", "pvc",
 ]
 
 SUFFIXES = [
     "succeeded", "failed", "timed-out", "denied", "accepted", "completed",
-    "dropped", "queued", "dequeued", "retried (3)", "status=200", "status=429",
+    "dropped", "queued", "retried (3)", "status=200", "status=429",
 ]
 
 ERROR_PATTERNS = [
     "connection refused", "TLS handshake timeout", "certificate expired",
     "invalid signature", "audience mismatch", "rate limit exceeded",
-    "circuit breaker open", "upstream timeout", "out of memory",
-    "etcdserver: request timed out"
+    "upstream timeout", "out of memory", "etcdserver: request timed out"
 ]
 
 # ────────────────────────────────────────────────
-#  LOADING BAR WORD POOL – now combinatorial & much more varied
+# LOADING BAR – single style, fixed borders
 # ────────────────────────────────────────────────
+LOAD_ADVERBS = [
+    "quantum", "tachyonic", "chroniton", "zero-point", "subspace",
+    "temporal", "Planck-scale", "hyperspace", "entropic", "non-local",
+    "fractal", "holographic", "topological", "acausal", "retro-causal",
+]
 
 LOAD_VERBS = [
     "Entangling", "Collapsing", "Calibrating", "Synchronizing", "Decrypting",
-    "Re-aligning", "Simulating", "Harvesting", "Warming", "Folding",
-    "Initializing", "Purging", "Compressing", "Overclocking", "Refactoring",
-    "Uploading", "Tuning", "Stabilizing", "Re-weaving", "Bootstrapping",
-    "Resolving", "Fracturing", "Amplifying", "Nullifying", "Transmuting",
-    "Vectorizing", "Quantizing", "Rehydrating", "Desaturating", "Hyper-threading",
-    "Phase-shifting", "Membrane-stretching", "Flux-inverting", "Lattice-repairing",
-    "Singularity-seeding", "Causality-pruning", "Entropy-reversing",
-]
-
-LOAD_ADVERBS = [
-    "quantum", "tachyonic", "chroniton", "zero-point", "brane-world",
-    "11-dimensional", "dark-pool", "neutrino-cooled", "subspace", "recursive",
-    "temporal", "Planck-scale", "imaginary-unit", "post-singularity",
-    "hyperspace", "exotic-matter", "causal", "probability-thread", "shadow",
-    "mirror", "entropic", "non-local", "acausal", "retro-causal", "fractal",
-    "holographic", "topological", "chiral", "axionic", "supersymmetric",
+    "Re-aligning", "Harvesting", "Folding", "Initializing", "Purging",
+    "Compressing", "Tuning", "Stabilizing", "Bootstrapping", "Resolving",
+    "Amplifying", "Transmuting", "Vectorizing", "Quantizing", "Phase-shifting",
 ]
 
 LOAD_OBJECTS = [
-    "key distribution nodes", "waveform of shadow partition", "flux capacitor",
-    "field harmonics", "energy signature", "membrane tension",
-    "firewall lattice", "telemetry entropy", "hash oracle",
-    "protein chains", "singularity bootstrap", "echo artifacts",
-    "metadata", "unit cache", "blockchain of consciousness",
-    "soul fragment checksums", "routing tables", "matter containment",
-    "probability threads", "observer", "causal knot", "dimensional anchor",
-    "vacuum decay bubble", "brane collision", "topological defect",
-    "mirror neuron cluster", "entanglement manifold", "wavefunction collapse",
-    "false vacuum tunnel", "axion condensate", "graviton condensate",
-]
-
-LOAD_SUFFIXES = [
-    "", "matrix", "core", "subsystem", "array", "lattice", "field",
-    "resonator", "emitter", "injector", "stabilizer", "dampener",
-    "collider", "distributor", "replicator", "forge", "vortex", "anchor",
-    "conduit", "singularity", "brane", "membrane", "topos", "sheaf",
-]
-
-LOAD_EXTRA = [
-    "", "in subspace", "via hyperspace", "under quantum load", "at Planck resolution",
-    "in mirror universe", "across 11 branes", "through non-local channels",
-    "with retrocausal feedback", "using axionic cooling", "in fractal time",
-    "against entropy gradient", "beyond event horizon", "inside causal diamond",
+    "flux capacitor", "field harmonics", "membrane tension", "telemetry entropy",
+    "hash oracle", "singularity bootstrap", "probability threads", "causal knot",
+    "dimensional anchor", "vacuum decay bubble", "topological defect",
+    "entanglement manifold", "wavefunction collapse", "axion condensate",
 ]
 
 def generate_loading_task():
-    """Generate varied pseudo-scientific loading task strings"""
-    parts = []
+    adverb = random.choice(LOAD_ADVERBS)
+    verb = random.choice(LOAD_VERBS).lower()
+    obj = random.choice(LOAD_OBJECTS)
+    suffix = random.choice(["", " matrix", " core", " lattice", " field", " conduit"]) if random.random() < 0.5 else ""
+    extra = random.choice(["", " in subspace", " via hyperspace", " at Planck resolution"]) if random.random() < 0.35 else ""
 
-    # Most common pattern: Adverb + Verb + Object (+ optional suffix/extra)
-    if random.random() < 0.65:
-        parts.append(random.choice(LOAD_ADVERBS))
-        parts.append(random.choice(LOAD_VERBS).lower())
-        parts.append(random.choice(LOAD_OBJECTS))
-        
-        if random.random() < 0.45:
-            parts.append(random.choice(LOAD_SUFFIXES))
-        if random.random() < 0.35:
-            parts.append(random.choice(LOAD_EXTRA))
-    
-    # Verb-first style
-    elif random.random() < 0.20:
-        parts.append(random.choice(LOAD_VERBS))
-        parts.append(random.choice(LOAD_OBJECTS))
-        if random.random() < 0.6:
-            parts.append(random.choice(LOAD_SUFFIXES))
-    
-    # Over-the-top compound style
-    else:
-        parts.append(random.choice(["Re-", "Hyper-", "Meta-", "Ultra-", "Post-", "Neo-"]))
-        parts.append(random.choice(LOAD_VERBS).lower())
-        parts.append(random.choice(LOAD_ADVERBS))
-        parts.append(random.choice(LOAD_OBJECTS))
-    
-    # Capitalize first word
-    task = " ".join(parts)
+    task = f"{adverb} {verb} {obj}{suffix}{extra}"
     task = task[0].upper() + task[1:]
-    
     return task
-
-
-# ────────────────────────────────────────────────
-#  LOADING BAR – same jittery/fast behavior
-# ────────────────────────────────────────────────
-
-BAR_STYLES = ["█", "▓", "▒", "░", "▉", "▊", "▋", "▌", "▍", "▎", "▏", "■", "▣", "▦", "▩", "⬛"]
 
 def print_fake_loading_bar():
     task = generate_loading_task()
-    width = random.randint(32, 54)
-    total_time_target = random.uniform(2.5, 9.0)
-
-    steps = random.randint(16, 34)
-
-    style_char = random.choice(BAR_STYLES)
-    empty_char = random.choice([" ", "·", "░", "⋅"])
-
-    print(f"\n  ┌─ {task.ljust(56)} ─┐")
-
+    
+    # Bar width
+    bar_width = random.randint(38, 56)
+    
+    # Inner content width = bar + space before % + "100%" + space after
+    inner_width = bar_width + 7   # ' ' + '100%' + ' ' = 7 chars
+    
+    # Horizontal line of correct length
+    hline = "─" * inner_width
+    
+    # Top border
+    print(f"\n{BRIGHT}╭─ {task.ljust(inner_width - 4)} ─╮{RESET}")
+    
     current_progress = 0.0
-    last_rendered = -1
+    last_filled = -1
+    style_char = random.choice(["█", "▓", "▉", "▊", "■"])
+    empty_char = random.choice([" ", "·", "░"])
 
-    for i in range(steps):
+    for step in range(random.randint(18, 36)):
         remaining = 1.0 - current_progress
-        natural_step = remaining * random.uniform(0.06, 0.28)
+        increment = remaining * random.uniform(0.07, 0.26)
+        if random.random() < 0.22:
+            increment *= random.uniform(2.5, 7.0)
+        if random.random() < 0.35:
+            increment *= random.uniform(0.05, 0.4)
 
-        if random.random() < 0.20:
-            natural_step *= random.uniform(2.8, 8.0)
-
-        if random.random() < 0.38:
-            natural_step *= random.uniform(0.04, 0.45)
-
-        current_progress += natural_step
+        current_progress += increment
         current_progress = min(1.0, current_progress)
 
-        filled = int(width * current_progress)
+        filled = int(bar_width * current_progress)
         percent = int(current_progress * 100)
 
-        if filled <= last_rendered and i < steps - 1:
-            time.sleep(random.uniform(0.04, 0.45))
+        if filled == last_filled and step < 35:
+            time.sleep(random.uniform(0.05, 0.4))
             continue
 
-        bar = style_char * filled + empty_char * (width - filled)
-        line = f"  │ {bar} {percent:3}% │"
+        bar = style_char * filled + empty_char * (bar_width - filled)
+        line = f"{BRIGHT}│{RESET} {bar} {percent:>3}% {BRIGHT}│{RESET}"
         print(line, end="\r", flush=True)
-        last_rendered = filled
+        last_filled = filled
 
-        sleep_base = random.uniform(0.04, 0.65)
+        sleep_time = random.uniform(0.05, 0.7)
+        if current_progress > 0.88:
+            sleep_time *= random.uniform(0.7, 3.0) if random.random() < 0.6 else random.uniform(1.4, 4.2)
+        time.sleep(max(0.03, sleep_time))
 
-        if random.random() < 0.18:
-            sleep_base += random.uniform(0.4, 1.8)
-
-        if random.random() < 0.20:
-            sleep_base *= random.uniform(0.06, 0.30)
-
-        if current_progress > 0.87:
-            if random.random() < 0.50:
-                sleep_base *= random.uniform(0.08, 0.45)
-            else:
-                sleep_base *= random.uniform(1.3, 3.2)
-
-        time.sleep(max(0.02, sleep_base))
-
-    bar = style_char * width
-    print(f"  │ {bar} 100% │".ljust(72))
-    time.sleep(random.uniform(0.08, 0.4))
-    print(f"  └─ {task} complete ─┘\n")
-
+    # Final bar
+    bar = style_char * bar_width
+    print(f"{BRIGHT}│{RESET} {bar} 100% {BRIGHT}│{RESET}")
+    
+    # Bottom border
+    print(f"{BRIGHT}╰{'─' * inner_width}╯{RESET}\n")
+    
+    time.sleep(random.uniform(0.12, 0.55))
 
 # ────────────────────────────────────────────────
-#  LOG HELPERS (unchanged)
+# LOG HELPERS
 # ────────────────────────────────────────────────
-
 def random_timestamp():
     now = datetime.utcnow()
     ms = random.randint(0, 999)
-    jitter = random.uniform(-1.4, 2.1)
+    jitter = random.uniform(-1.2, 1.8)
     ts = now.timestamp() + jitter
     dt = datetime.fromtimestamp(ts)
     return dt.strftime("%Y-%m-%d %H:%M:%S") + f".{ms:03d}Z"
-
 
 def random_duration():
     kinds = [
         f"{random.randint(8, 1200)}ms",
         f"{random.uniform(0.4, 5.9):.2f}s",
-        f"{random.randint(1, 9)}.{random.randint(0,999):03d}s",
         f"{random.randint(90, 6800)}µs"
     ]
     return random.choice(kinds)
 
-
 def build_message():
     style = random.random()
-
-    if style < 0.30:
+    if style < 0.40:
         parts = [
             random.choice(SERVICES),
             random.choice(ACTION_VERBS),
             random.choice(OBJECTS),
-            random.choice(SUFFIXES + ["", f"duration={random_duration()}", f"phase={random.choice(['Pending','Running','Terminating','CrashLoopBackOff'])}"])
+            random.choice(SUFFIXES + ["", f"duration={random_duration()}"])
         ]
         return " ".join(filter(None, parts))
-
-    elif style < 0.55:
+    elif style < 0.70:
         code = random.choices(
-            ["200", "201", "204", "400", "401", "403", "404", "429", "500", "502", "503"],
-            weights=[38, 9, 11, 7, 10, 12, 6, 8, 5, 3, 4], k=1
+            ["200", "201", "400", "401", "403", "404", "429", "500", "503"],
+            weights=[40, 10, 8, 12, 13, 7, 9, 6, 5], k=1
         )[0]
         return (
-            f"request method={random.choice(['GET','POST','PUT','DELETE'])} "
-            f"path=/api/v1/{random.choice(['tokens','sessions','keys','audit','metrics'])} "
-            f"status={code} client={random.choice(['10.42.','172.31.','192.168.'])}"
-            f"{random.randint(0,255)}.{random.randint(0,255)} "
-            f"latency={random_duration()}"
+            f"request method={random.choice(['GET','POST','PUT'])} "
+            f"path=/api/v1/{random.choice(['tokens','sessions','audit'])} "
+            f"status={code} latency={random_duration()}"
         )
-
-    elif style < 0.80:
+    else:
         return (
             f"{random.choice(ACTION_VERBS)} failed → "
             f"{random.choice(ERROR_PATTERNS)} "
-            f"component={random.choice(SERVICES)} "
             f"trace={''.join(random.choices('0123456789abcdef', k=16))}"
         )
 
-    else:
-        fragments = [
-            f"[{random.choice(['OK','FAIL','WARN','SKIP','PASS','PENDING'])}]",
-            random.choice(SERVICES),
-            random.choice(ACTION_VERBS),
-            f"0x{random.randint(0, 0xFFFF):04x}",
-            f"seq={random.randint(10000,999999999)}",
-            f"shard={random.randint(0,31)}",
-            f"replica={random.randint(1,5)}/{random.randint(3,7)}"
-        ]
-        random.shuffle(fragments)
-        return " ".join(fragments[:random.randint(3,7)])
-
-
 # ────────────────────────────────────────────────
-#  MAIN LOOP
+# MAIN LOOP
 # ────────────────────────────────────────────────
-
 def main():
     print("\n" * 2)
     print("═" * 84)
-    print("   FAKE LOG + FAST & HIGHLY RANDOMIZED PROGRESS BARS   –  Ctrl+C to stop")
+    print(" FAKE LOGS + SCI-FI LOADING BAR  (Ctrl+C to stop)")
     print("═" * 84)
     print()
 
     line_count = 0
-
     try:
         while True:
-            if line_count > 5 and random.random() < 0.09:
+            if line_count > 5 and random.random() < 0.10:
                 print_fake_loading_bar()
                 line_count = 0
-                time.sleep(random.uniform(0.3, 1.3))
+                time.sleep(random.uniform(0.4, 1.4))
                 continue
 
             level = random.choice(LOG_LEVELS)
-            if level in ("ERROR", "CRITICAL") and random.random() > 0.22:
+            if level in ("ERROR", "CRITICAL") and random.random() > 0.25:
                 level = random.choice(["INFO", "WARN", "DEBUG"])
 
             host = random.choice(HOSTS)
@@ -302,19 +223,22 @@ def main():
             msg = build_message()
 
             extra = ""
-            if random.random() < 0.07:
-                extra = f"\n      ↳ {random.choice(ERROR_PATTERNS + ['stack trace truncated', 'cause=timeout', 'details redacted'])}"
+            if random.random() < 0.08:
+                extra = f"\n ↳ {random.choice(ERROR_PATTERNS + ['stack trace truncated', 'cause=timeout'])}"
 
-            line = f"{random_timestamp()}  {level:8}  {host:18}  {service:20}  {msg}{extra}"
-
+            line = (
+                f"{DIM}{random_timestamp()}{RESET} "
+                f"{COLORS.get(level, '')}{level:8}{RESET} "
+                f"{DIM}{host:18}{RESET} "
+                f"{DIM}{service:20}{RESET} "
+                f"{msg}{extra}"
+            )
             print(line)
             line_count += 1
-
-            time.sleep(random.uniform(0.04, 0.72))
+            time.sleep(random.uniform(0.05, 0.68))
 
     except KeyboardInterrupt:
         print("\n\nStopped.\n")
-
 
 if __name__ == "__main__":
     main()
