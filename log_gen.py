@@ -3,7 +3,7 @@ import random
 from datetime import datetime
 
 # ────────────────────────────────────────────────
-#  WORD LISTS - feel free to extend them
+#  WORD LISTS
 # ────────────────────────────────────────────────
 
 LOG_LEVELS = ["INFO", "WARN", "ERROR", "DEBUG", "CRITICAL", "TRACE", "NOTICE"]
@@ -16,8 +16,6 @@ SERVICES = [
     "vault-agent", "keycloak-sync", "oidc-broker", "sso-bridge",
     "redis-connector", "kafka-producer", "pulsar-client", "nats-jetstream",
     "temporal-worker", "dapr-sidecar", "linkerd-proxy", "istio-citadel",
-    "envoy-admin", "contour-ingress", "traefik-router", "nginx-ingress",
-    "wasm-runtime", "ebpf-sensor", "falco-driver", "sysdig-probe"
 ]
 
 HOSTS = [
@@ -31,55 +29,103 @@ ACTION_VERBS = [
     "syncing", "reconciling", "evicting", "terminating", "scaling",
     "restarting", "rolling", "draining", "cordon", "uncordon",
     "retrying", "failing", "timeout", "ratelimiting", "throttling",
-    "decrypting", "encrypting", "signing", "verifying", "hashing",
-    "indexing", "sharding", "rebalancing", "compacting", "snapshotting"
 ]
 
 OBJECTS = [
     "JWT", "access-token", "refresh-token", "OIDC-id-token", "SAML-assertion",
     "pod", "deployment", "statefulset", "daemonset", "node", "namespace",
     "secret", "configmap", "ingress", "service", "pvc", "pv",
-    "rbac-binding", "clusterrole", "mutating-webhook", "crd",
-    "span", "trace", "metric", "log-entry", "alert-rule", "silence"
 ]
 
 SUFFIXES = [
     "succeeded", "failed", "timed-out", "denied", "accepted", "completed",
-    "dropped", "queued", "dequeued", "retried (3)", "retried (7)",
-    "status=200", "status=401", "status=403", "status=429", "status=502",
-    "http/2", "grpc/1.0", "grpc-code=UNAVAILABLE", "grpc-code=DEADLINE_EXCEEDED",
-    "client=10.244.2.81", "principal=system:serviceaccount:prod:api-rw"
+    "dropped", "queued", "dequeued", "retried (3)", "status=200", "status=429",
+    "http/2", "grpc-code=UNAVAILABLE", "principal=system:serviceaccount:prod:api-rw"
 ]
 
 ERROR_PATTERNS = [
     "connection refused", "TLS handshake timeout", "certificate expired",
-    "invalid signature", "audience mismatch", "issuer not trusted",
-    "rate limit exceeded", "circuit breaker open", "upstream timeout",
-    "out of memory", "too many open files", "database unreachable",
-    "leader election lost", "lease expired", "etcdserver: request timed out"
+    "invalid signature", "audience mismatch", "rate limit exceeded",
+    "circuit breaker open", "upstream timeout", "out of memory",
+    "etcdserver: request timed out"
 ]
 
 # ────────────────────────────────────────────────
-#  HELPER FUNCTIONS
+#  FAKE LOADING BAR NONSENSE
+# ────────────────────────────────────────────────
+
+LOADING_TASKS = [
+    "Entangling quantum key distribution nodes",
+    "Collapsing waveform of shadow partition",
+    "Calibrating tachyonic flux capacitor",
+    "Synchronizing chroniton field harmonics",
+    "Decrypting zero-point energy signature",
+    "Re-aligning brane-world membrane tension",
+    "Simulating 11-dimensional firewall lattice",
+    "Harvesting dark-pool telemetry entropy",
+    "Warming up neutrino-cooled hash oracle",
+    "Folding protein chains in subspace",
+    "Initializing recursive singularity bootstrap",
+    "Purging temporal echo artifacts",
+    "Compressing Planck-scale metadata",
+    "Overclocking imaginary unit cache",
+    "Refactoring blockchain of consciousness",
+    "Uploading soul fragment checksums",
+    "Tuning hyperspace routing tables",
+    "Stabilizing exotic matter containment",
+]
+
+BAR_STYLES = [
+    "█", "▓", "▒", "░", "▉", "▊", "▋", "▌", "▍", "▎", "▏",
+    "⬜", "■", "▣", "▤", "▥", "▦", "▧", "▨", "▩", "⬛"
+]
+
+def print_fake_loading_bar():
+    task = random.choice(LOADING_TASKS)
+    width = random.randint(28, 48)
+    duration = random.uniform(1.8, 4.8)     # total fake time
+    steps = random.randint(18, 36)
+    step_time = duration / steps
+
+    style_char = random.choice(BAR_STYLES)
+    empty_char = " " if random.random() < 0.7 else random.choice(["·", "-", "░", "⋅"])
+
+    print(f"\n  ┌─ {task.ljust(50)} ─┐")
+    
+    for i in range(steps + 1):
+        progress = i / steps
+        filled = int(width * progress)
+        bar = style_char * filled + empty_char * (width - filled)
+        percent = int(progress * 100)
+        line = f"  │ {bar} {percent:3}% │"
+        print(line, end="\r", flush=True)
+        time.sleep(step_time * random.uniform(0.6, 1.4))
+
+    # Complete
+    bar = style_char * width
+    print(f"  │ {bar} 100% │".ljust(60))
+    print(f"  └─ {task} complete ─┘\n")
+
+
+# ────────────────────────────────────────────────
+#  LOG HELPERS
 # ────────────────────────────────────────────────
 
 def random_timestamp():
-    # slightly jittered current time (looks more real)
     now = datetime.utcnow()
     ms = random.randint(0, 999)
-    jitter_sec = random.uniform(-1.2, 1.8)
-    ts = now.timestamp() + jitter_sec
+    jitter = random.uniform(-1.4, 2.1)
+    ts = now.timestamp() + jitter
     dt = datetime.fromtimestamp(ts)
     return dt.strftime("%Y-%m-%d %H:%M:%S") + f".{ms:03d}Z"
 
 
 def random_duration():
-    # realistic looking durations
     kinds = [
-        f"{random.randint(12, 980)}ms",
-        f"{random.uniform(0.8, 4.7):.2f}s",
-        f"{random.randint(1, 12)}.{random.randint(0,999):03d}s",
-        f"{random.randint(200, 4500)}µs"
+        f"{random.randint(8, 1200)}ms",
+        f"{random.uniform(0.4, 5.9):.2f}s",
+        f"{random.randint(1, 9)}.{random.randint(0,999):03d}s",
+        f"{random.randint(90, 6800)}µs"
     ]
     return random.choice(kinds)
 
@@ -87,54 +133,48 @@ def random_duration():
 def build_message():
     style = random.random()
 
-    if style < 0.35:
-        # ── Kubernetes / container style ───────────────
+    if style < 0.30:
         parts = [
             random.choice(SERVICES),
             random.choice(ACTION_VERBS),
             random.choice(OBJECTS),
-            random.choice(SUFFIXES + ["", f"duration={random_duration()}", f"phase={random.choice(['Pending','Running','Terminating'])}"])
+            random.choice(SUFFIXES + ["", f"duration={random_duration()}", f"phase={random.choice(['Pending','Running','Terminating','CrashLoopBackOff'])}"])
         ]
         return " ".join(filter(None, parts))
 
-    elif style < 0.60:
-        # ── HTTP / auth / API style ────────────────────
+    elif style < 0.55:
         code = random.choices(
             ["200", "201", "204", "400", "401", "403", "404", "429", "500", "502", "503"],
-            weights=[35, 8, 12, 6, 9, 11, 5, 7, 4, 2, 3], k=1
+            weights=[38, 9, 11, 7, 10, 12, 6, 8, 5, 3, 4], k=1
         )[0]
-
         return (
-            f"request completed method={random.choice(['GET','POST','PUT','PATCH','DELETE'])} "
-            f"path=/api/v1/{random.choice(['tokens','sessions','users','roles','permissions'])} "
-            f"status={code} "
-            f"client_ip={random.choice(['10.42.','172.16.','192.168.'])}"
+            f"request method={random.choice(['GET','POST','PUT','DELETE'])} "
+            f"path=/api/v1/{random.choice(['tokens','sessions','keys','audit','metrics'])} "
+            f"status={code} client={random.choice(['10.42.','172.31.','192.168.'])}"
             f"{random.randint(0,255)}.{random.randint(0,255)} "
-            f"duration={random_duration()}"
+            f"latency={random_duration()}"
         )
 
     elif style < 0.80:
-        # ── Error / warning style ──────────────────────
         return (
-            f"{random.choice(ACTION_VERBS)} failed - "
+            f"{random.choice(ACTION_VERBS)} failed → "
             f"{random.choice(ERROR_PATTERNS)} "
             f"component={random.choice(SERVICES)} "
-            f"trace_id={''.join(random.choices('0123456789abcdef', k=16))}"
+            f"trace={''.join(random.choices('0123456789abcdef', k=16))}"
         )
 
     else:
-        # ── Generic high-tech noise ────────────────────
         fragments = [
-            f"[{random.choice(['OK','FAIL','WARN','SKIP','PASS'])}]",
+            f"[{random.choice(['OK','FAIL','WARN','SKIP','PASS','PENDING'])}]",
             random.choice(SERVICES),
             random.choice(ACTION_VERBS),
             f"0x{random.randint(0, 0xFFFF):04x}",
-            f"seq={random.randint(100000,999999999)}",
-            f"shard={random.randint(0,15)}",
-            f"replica={random.randint(1,5)}/{random.randint(3,5)}"
+            f"seq={random.randint(10000,999999999)}",
+            f"shard={random.randint(0,31)}",
+            f"replica={random.randint(1,5)}/{random.randint(3,7)}"
         ]
         random.shuffle(fragments)
-        return " ".join(fragments[:random.randint(3,6)])
+        return " ".join(fragments[:random.randint(3,7)])
 
 
 # ────────────────────────────────────────────────
@@ -144,32 +184,40 @@ def build_message():
 def main():
     print("\n" * 2)
     print("═" * 80)
-    print("  FAKE LOG GENERATOR  –  Ctrl+C to stop")
+    print("   FAKE LOG + PROGRESS-QUEST STYLE LOADING BARS   –  Ctrl+C to stop")
     print("═" * 80)
     print()
 
+    line_count = 0
+
     try:
         while True:
-            level = random.choice(LOG_LEVELS)
-            weight = random.random()
+            # Decide whether to show a fake loading bar
+            if line_count > 6 and random.random() < 0.09:  # roughly every 8–25 lines
+                print_fake_loading_bar()
+                line_count = 0
+                time.sleep(random.uniform(0.4, 1.2))
+                continue
 
-            # make ERROR/CRITICAL less common
-            if level in ("ERROR", "CRITICAL") and weight > 0.18:
+            level = random.choice(LOG_LEVELS)
+            if level in ("ERROR", "CRITICAL") and random.random() > 0.20:
                 level = random.choice(["INFO", "WARN", "DEBUG"])
 
             host = random.choice(HOSTS)
             service = random.choice(SERVICES)
             msg = build_message()
 
-            # occasional multi-line log entry
-            if random.random() < 0.08:
-                extra = f"    ↳ {random.choice(ERROR_PATTERNS + ['stack=unknown', 'details omitted', 'cause=timeout'])}"
-                msg += "\n" + extra
+            # occasional multi-line
+            extra = ""
+            if random.random() < 0.07:
+                extra = f"\n      ↳ {random.choice(ERROR_PATTERNS + ['stack trace truncated', 'cause=timeout', 'details redacted'])}"
 
-            line = f"{random_timestamp()}  {level:8}  {host:18}  {service:20}  {msg}"
+            line = f"{random_timestamp()}  {level:8}  {host:18}  {service:20}  {msg}{extra}"
 
             print(line)
-            time.sleep(random.uniform(0.07, 0.70))   # vary speed a bit
+            line_count += 1
+
+            time.sleep(random.uniform(0.05, 0.65))
 
     except KeyboardInterrupt:
         print("\n\nStopped.\n")
