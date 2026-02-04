@@ -62,9 +62,9 @@ ERROR_PATTERNS = [
 # LOADING BAR – single style, fixed borders
 # ────────────────────────────────────────────────
 LOAD_ADVERBS = [
-    "quantum", "tachyonic", "chroniton", "zero-point", "subspace",
-    "temporal", "Planck-scale", "hyperspace", "entropic", "non-local",
-    "fractal", "holographic", "topological", "acausal", "retro-causal",
+    "quantumly", "tachyonically", "chronitonically", "zeropointly", "subspacely",
+    "temporally", "entropically", "nonlocally",
+    "fractally", "holographically", "topologically", "acausally", "retrocausally",
 ]
 
 LOAD_VERBS = [
